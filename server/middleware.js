@@ -12,6 +12,7 @@ module.exports = function (app, express){
   app.use(bodyParser.json());
 
   // serve static assets?
+  // this line is telling Express to serve static objects from the .. dir, but to make them actually seem like they're coming from the top level
   // app.use(express.static(__dirname + '/..'));
 
   app.use('/api', apiRouter);
