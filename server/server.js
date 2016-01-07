@@ -1,6 +1,9 @@
-var express = require('express');
+var express  = require('express'),
+    mongoose = require('mongoose');
 
 var app = express();
+
+mongoose.connect('mongodb://localhost/shortly');
 
 require('./middleware.js')(app, express);
 
