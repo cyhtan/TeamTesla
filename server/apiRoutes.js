@@ -1,25 +1,26 @@
 var whichController = require('./which/whichController.js');
 
-// this comes from middleware.js
 module.exports = function (apiRouter) {
 
+  /*     Routes beginning with /api/which
+
+       See documentation at corresponding 
+       function in whichController.js
+  */
+  apiRouter.get('/which', whichController.getNewestWhich);
+  apiRouter.post('/which', whichController.createWhich);
+  apiRouter.post('/which/:whichID/judge', whichController.judgeWhich);
+  
+  /*   For all dynamic routes containing a :whichID,
+       before passing the request along to its handler
+       create a whichID property on req.body containing that ID
+  */
   apiRouter.param('whichID', function(req, res, next, whichID){
     req.body.whichID = whichID;
     next();
   })
 
-  // reaches into the database and comes back with a which object
-  // FOR DEVELOPMENT is getNewestWhich, otherwise getOldestWhich
-  apiRouter.get('/which', whichController.getNewestWhich);
-  // reaches into the database and places a new which object in it
-  apiRouter.post('/which', whichController.createWhich);
 
   // TODO: implement getting which by id
-  // apiRouter.get('/which/:id', function () {});
-
-  // reaches into the database to get the which in question, then calls a function on it
-  // in this case the function is "judge it"
-  apiRouter.post('/which/:whichID/judge', whichController.judgeWhich);
-
-
+  // apiRouter.get('/which/:whichID', function () {});
 };
