@@ -72,15 +72,15 @@ module.exports = {
           counts for the Which choices
   */
   judgeWhich : function (req, res, next) {
-
     var whichID  = req.body.whichID;
     var choice   = req.body.choice.toUpperCase();
+    // TODO: append username to votesFrom
     var username = req.body.username;
 
     var updateCommand = { $inc: {} };
     updateCommand.$inc['thing'+ choice + 'VoteCount'] = 1;
 
-    Which.findOneAndUpdate({_id: whichID}, updateCommand)
+    Which.findOneAndUpdate({_id: whichID}, updateCommand, {new:true})
       .exec(function(err, dbResults){
         if (err) throw err;
         else {
@@ -88,12 +88,36 @@ module.exports = {
             votesForA: dbResults.thingAVoteCount,
             votesForB: dbResults.thingBVoteCount
           }
-          // Oddly, results from Mongo are not up-to-date with the user's own vote
-          clientResults['votesFor'+choice]++;
           res.json(clientResults);
         }
       });
   },
+
+
+  /*        Route Handler - POST /api/which/:id/tag   
+
+        * Expects an object with a property tag.
+          Expects tag to be a string that does not contain spaces.
+        * Responds with a JSON object containing a tagNames
+          property. tagNames is an array containing all tags
+          the Which currently has
+  */
+  tagWhich : function (req, res, next) {
+    var whichID  = req.body.whichID;
+    var tag      = req.body.tag;
+
+    var updateCommand = { $addToSet: {"tags": tag} };
+
+    Which.findByIdAndUpdate(whichID,updateCommand, {new:true})
+      .exec(function(err, dbResults){
+        if (err) throw err;
+        else {
+          var clientResults = {tagNames: dbResults.tags};
+          res.json(clientResults);
+        }
+      });
+  },
+
 
   /*        Route Handler - GET /api/tag/:tagName   
 
@@ -117,6 +141,7 @@ module.exports = {
 
 /*
   // This function has been factored out, but may be used in the future
+  // as a route handler for GET /api/which/:id
   getWhichByID: function (req, res, next, whichID) {
     var findWhich = Q.nbind(Which.findOne, Which);
     findWhich({_id: whichID})

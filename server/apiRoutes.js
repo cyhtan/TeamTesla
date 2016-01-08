@@ -10,6 +10,7 @@ module.exports = function (apiRouter) {
   apiRouter.get('/which', whichController.getNewestWhich);
   apiRouter.post('/which', whichController.createWhich);
   apiRouter.post('/which/:whichID/judge', whichController.judgeWhich);
+  apiRouter.post('/which/:whichID/tag',   whichController.tagWhich);
 
 
 
