@@ -5,15 +5,15 @@ module.exports = {
   // TODO: Once users have been implemented,
   //       complete this function and use it to
   //       retrieve the oldest, >_unseen_< Which for
-  //       that user. 
+  //       that user.
   //       Finally, make this the new route handler
   //       for GET /api/which
   getOldestWhich : function (req, res, next) {
 
-  },  
+  },
 
-  
-  /*        Route Handler - GET /api/which/  
+
+  /*        Route Handler - GET /api/which/
 
         * Expects no incoming data
         * Responds with JSON containing the Which
@@ -35,11 +35,11 @@ module.exports = {
   },
 
 
-  /*        Route Handler - POST /api/which/  
+  /*        Route Handler - POST /api/which/
 
         * Expects a Which object with properties enumerated
           in newWhich below
-        * Responds with JSON containing the newly created 
+        * Responds with JSON containing the newly created
           Which object
   */
   createWhich : function (req, res, next) {
@@ -51,7 +51,7 @@ module.exports = {
       createdBy: data.createdBy, // username
       tags: data.tags,
       type : data.type,
-      thingA : data.thingA, // either string of text, or url to resource
+      thingA : data.thingA, // either string of text, or url tot resource
       thingB : data.thingB
     };
 
@@ -64,7 +64,7 @@ module.exports = {
   },
 
 
-  /*        Route Handler - POST /api/which/:id/judge   
+  /*        Route Handler - POST /api/which/:id/judge
 
         * Expects an object with the properties username
           and choice. Expects choice to be the string 'A' or 'B'
@@ -77,10 +77,10 @@ module.exports = {
     // TODO: append username to votesFrom
     var username = req.body.username;
 
-    var updateCommand = { $inc: {} };
+    var updateCommand = { $inc: {} }; // $inc is a Mongo increment command
     updateCommand.$inc['thing'+ choice + 'VoteCount'] = 1;
 
-    Which.findOneAndUpdate({_id: whichID}, updateCommand, {new:true})
+    Which.findOneAndUpdate({_id: whichID}, updateCommand, {new:true}) // include updated values in dbResults
       .exec(function(err, dbResults){
         if (err) throw err;
         else {
@@ -94,7 +94,7 @@ module.exports = {
   },
 
 
-  /*        Route Handler - POST /api/which/:id/tag   
+  /*        Route Handler - POST /api/which/:id/tag
 
         * Expects an object with a property tag.
           Expects tag to be a string that does not contain spaces.
@@ -106,9 +106,9 @@ module.exports = {
     var whichID  = req.body.whichID;
     var tag      = req.body.tag;
 
-    var updateCommand = { $addToSet: {"tags": tag} };
+    var updateCommand = { $addToSet: {"tags": tag} }; // $addToSet will not add the value if it already exists
 
-    Which.findByIdAndUpdate(whichID,updateCommand, {new:true})
+    Which.findByIdAndUpdate(whichID,updateCommand, {new:true}) // include updated values in dbResults
       .exec(function(err, dbResults){
         if (err) throw err;
         else {
@@ -119,7 +119,7 @@ module.exports = {
   },
 
 
-  /*        Route Handler - GET /api/tag/:tagName   
+  /*        Route Handler - GET /api/tag/:tagName
 
         * Expects no incoming data
         * Responds with JSON containing an array of
