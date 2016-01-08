@@ -95,6 +95,26 @@ module.exports = {
       });
   },
 
+  /*        Route Handler - GET /api/tag/:tagName   
+
+        * Expects no incoming data
+        * Responds with JSON containing an array of
+          Whiches that contain tagName in their tags array
+  */
+  getWhichesByTag : function (req, res, next) {
+    var tag = req.body.tagName;
+    Which.find({tags: tag})
+      .exec(function(err, dbResults){
+        if (err) throw err;
+        else {
+          res.json(dbResults);
+        }
+      });
+  }
+
+
+
+
 /*
   // This function has been factored out, but may be used in the future
   getWhichByID: function (req, res, next, whichID) {
