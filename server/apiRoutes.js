@@ -4,7 +4,8 @@ var whichController = require('./which/whichController.js');
 module.exports = function (apiRouter) {
 
   // reaches into the database and comes back with a which object
-  apiRouter.get('/which', whichController.getOldestWhich);
+  // FOR DEVELOPMENT is getNewestWhich, otherwise getOldestWhich
+  apiRouter.get('/which', whichController.getNewestWhich);
   // reaches into the database and places a new which object in it
   apiRouter.post('/which', whichController.createWhich);
 

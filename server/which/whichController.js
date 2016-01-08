@@ -6,6 +6,32 @@ module.exports = {
   // get oldest unseen which
   getOldestWhich : function (req, res, next) {
 
+  },  // get a fresh Which, for development checking
+  getNewestWhich : function (req, res, next) {
+    var findAllWhich = Q.nbind(Which.find, Which);
+    findAllWhich({})
+      .then(function(whiches){
+
+        console.log('1 whiches:', whiches);
+
+        // find the most recent which
+        return whiches.reduce(function(memo, curWhich){
+          if ( memo.createdAt < curWhich.createdAt ) {
+            return curWhich;
+          } else {
+            return memo;
+          }
+        });
+
+      })
+      .then(function(newestWhich){
+        console.log('2 newestWhich:', newestWhich);
+        res.json(newestWhich);
+      })
+      .fail(function(err){
+        next(err);
+      });
+
   },
   // create a new which
   createWhich : function (req, res, next) {
@@ -15,6 +41,7 @@ module.exports = {
 
     // THIS MIGHT BE WRONG
     var data = req.body;
+    console.log('req.body: ',data);
 
     var newWhich = {
       // id:    mongo creates this?
@@ -32,7 +59,7 @@ module.exports = {
       if (createdWhich) res.json(createdWhich);
     })
     .fail(function(err){
-      next(error);
+      next(err);
     });
 
   }

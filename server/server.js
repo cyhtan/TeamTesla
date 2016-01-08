@@ -3,7 +3,7 @@ var express  = require('express'),
 
 var app = express();
 
-mongoose.connect('mongodb://localhost/shortly');
+mongoose.connect('mongodb://localhost/testdb');
 
 require('./middleware.js')(app, express);
 
