@@ -4,7 +4,7 @@
   "description": "> Pithy project description",
   "main": "./server/server.js",
   "scripts": {
-    //"start": TODO,
+    "start": "node server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,6 +19,7 @@
   "homepage": "https://github.com/HRR-TeamTesla/TeamTesla#readme",
   "dependencies": {
     "body-parser": "^1.14.2",
+    "cors": "^2.7.1",
     "express": "^4.13.3",
     "mongoose": "^4.3.4",
     "morgan": "^1.6.1",

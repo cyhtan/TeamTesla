@@ -1,5 +1,6 @@
 var morgan     = require('morgan'),
-    bodyParser = require('body-parser');
+    bodyParser = require('body-parser'),
+    cors = require('cors');
 
 // we passed in app and express from server.js
 module.exports = function (app, express){
@@ -8,6 +9,7 @@ module.exports = function (app, express){
 
   // morgan is a console logger, 'dev' means developer mode...  copied in from Shortly Angular
   app.use(morgan('dev'));
+  app.use(cors());
   app.use(bodyParser.urlencoded( {extended:true} ));
   app.use(bodyParser.json());
 
